@@ -1,2 +1,2 @@
-# Coffee Store
+# Espresso Emporium Coffee Store
 
