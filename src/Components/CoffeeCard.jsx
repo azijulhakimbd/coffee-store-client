@@ -1,44 +1,43 @@
 import { Eye, Pencil, Trash2, X } from "lucide-react";
 import React from "react";
+import { Link } from "react-router";
 import Swal from "sweetalert2";
 
-const CoffeeCard = ({ coffee }) => {
-  const { _id, name, quantity, category, Price, photo } = coffee;
+const CoffeeCard = ({ coffee, coffees, setsCoffees }) => {
+  const { _id, name, quantity, category, photo, Price } = coffee;
 
-
-  // Delete 
+  // Delete
   const handleDelete = (_id) => {
     console.log(_id);
     Swal.fire({
-  title: "Are you sure?",
-  text: "You won't be able to revert this!",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Yes, delete it!"
-}).then((result) => {
-  if (result.isConfirmed) {
-    // Start Delete
-    fetch(`http://localhost:3000/coffees/${_id}`,{
-      method:'DELETE'
-    })
-    .then(res=>res.json())
-    .then(data=>{
-      if(data.deletedCount){
-        Swal.fire({
-      title: "Deleted!",
-      text: "Your Coffee has been deleted.",
-      icon: "success"
-    });
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Start Delete
+        fetch(`http://localhost:3000/coffees/${_id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your Coffee has been deleted.",
+                icon: "success",
+              });
+              const remainigCoffee=coffees.filter(cof => cof._id !== _id);
+              setsCoffees(remainigCoffee)
+            }
+            console.log(data);
+          });
       }
-      console.log(data);
-      
-    })
-
-    
-  }
-});
+    });
   };
   return (
     <div>
@@ -62,9 +61,13 @@ const CoffeeCard = ({ coffee }) => {
             <button className="join-item bg-yellow-600 text-amber-100 btn">
               <Eye />
             </button>
-            <button className="join-item bg-gray-800 text-amber-100 btn">
-              <Pencil />
-            </button>
+
+            <Link to={`/updateCoffee/${_id}`}>
+              {" "}
+              <button className="join-item bg-gray-800 text-amber-100 btn">
+                <Pencil />
+              </button>
+            </Link>
             <button
               onClick={() => handleDelete(_id)}
               className="join-item bg-red-700 text-amber-100 btn"
