@@ -1,27 +1,33 @@
 import React from "react";
+import Swal from "sweetalert2";
 
 const AddCoffee = () => {
-    const handleAddCoffee = e =>{
-        e.preventDefault();
-        const form=e.target;
-        const formData = new FormData(form);
-        const newCoffee = Object.fromEntries(formData.entries())
-        console.log(newCoffee);
-        // send data to db
-        fetch('http://localhost:3000/coffees',{
-            method:'POST',
-            headers:{
-                'content-type':'application/json'
-            },
-            body:JSON.stringify(newCoffee)
-        })
-        .then(res =>res.json())
-        .then(data=>{
-            console.log('after add coffee', data);
-            
-        })
-        
-    }
+  const handleAddCoffee = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const newCoffee = Object.fromEntries(formData.entries());
+    console.log(newCoffee);
+    // send data to db
+    fetch("http://localhost:3000/coffees", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newCoffee),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          Swal.fire({
+            title: "Coffee Added Successfully!",
+            icon: "success",
+            draggable: true,
+          });
+          form.reset();
+        }
+      });
+  };
   return (
     <div className="p-24 bg-[#efefef]">
       <div className="p-12 text-center space-y-4">
@@ -46,7 +52,7 @@ const AddCoffee = () => {
             />
           </fieldset>
 
-          {/* Chef */}
+          {/* Quantity */}
           <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4">
             <label className="label font-bold text-black">Quantity</label>
             <input
@@ -68,14 +74,14 @@ const AddCoffee = () => {
             />
           </fieldset>
 
-          {/* Taste */}
+          {/* Price */}
           <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4">
-            <label className="label font-bold text-black">Taste</label>
+            <label className="label font-bold text-black">Price</label>
             <input
               type="text"
-              name="taste"
+              name="Price"
               className="input w-full"
-              placeholder="Enter coffee taste"
+              placeholder="Enter coffee Price"
             />
           </fieldset>
 
@@ -104,16 +110,20 @@ const AddCoffee = () => {
 
         {/* Photo URL */}
         <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-full border my-6 p-4">
-            <label className="label font-bold text-black">Photo</label>
-            <input
-              type="text"
-              name="photo"
-              className="input w-full"
-              placeholder="Coffee Photo URL"
-            />
-          </fieldset>
-          {/* add coffee */}
-          <input type="submit" className="btn w-full font-bold text-black" value="Add Coffee" />
+          <label className="label font-bold text-black">Photo</label>
+          <input
+            type="text"
+            name="photo"
+            className="input w-full"
+            placeholder="Coffee Photo URL"
+          />
+        </fieldset>
+        {/* add coffee */}
+        <input
+          type="submit"
+          className="btn w-full font-bold text-black"
+          value="Add Coffee"
+        />
       </form>
     </div>
   );
