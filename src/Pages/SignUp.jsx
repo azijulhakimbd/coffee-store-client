@@ -1,6 +1,24 @@
-import React from "react";
+import React, { use } from "react";
+import { AuthContext } from "../Provider/AuthContext";
 
 const Signup = () => {
+    const {createUser}=use(AuthContext)
+    const handleRegister=e=>{
+        e.preventDefault();
+        const form=e.target;
+        const formData= new FormData(form);
+        const email=formData.get('email');
+        const password=formData.get('password')
+        createUser(email,password)
+        .then(result =>{
+            const user=result.user;
+            console.log(user);
+            
+        }).catch(error=>{
+            console.log(error);
+            
+        })
+    }
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#efefef]">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-5xl flex overflow-hidden">
@@ -20,7 +38,7 @@ const Signup = () => {
             Enter your information to register
           </p>
 
-          <form className="space-y-4">
+          <form onSubmit={handleRegister} className="space-y-4">
             <div className="flex gap-4">
               <div className="w-1/2">
                 <label className="text-sm text-gray-600">First name</label>
@@ -43,7 +61,7 @@ const Signup = () => {
             <div>
               <label className="text-sm text-gray-600">Email</label>
               <input
-                type="email"
+                type="email" name="email" required
                 placeholder="johnsmith@example.com"
                 className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
               />
@@ -52,8 +70,8 @@ const Signup = () => {
             <div>
               <label className="text-sm text-gray-600">Password</label>
               <input
-                type="password"
-                placeholder="************"
+                type="password" name="password"
+                placeholder="************" required
                 className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
               />
             </div>
